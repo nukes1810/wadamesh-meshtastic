@@ -1,0 +1,50 @@
+name: Build radio test (T-Deck)
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "tools/radio_test/**"
+      - "src/meshport/**"
+      - "platformio.ini"
+      - ".github/workflows/build-radio-test.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache PlatformIO
+        uses: actions/cache@v4
+        with:
+          path: ~/.platformio
+          key: pio-radiotest-${{ hashFiles('platformio.ini') }}
+
+      - name: Install PlatformIO
+        run: pip install "platformio>=6.1.15"
+
+      - name: Build radio test
+        run: pio run -e meshport_radio_test
+
+      - name: Collect flash images
+        run: |
+          mkdir -p out
+          cp .pio/build/meshport_radio_test/bootloader.bin out/
+          cp .pio/build/meshport_radio_test/partitions.bin out/
+          cp .pio/build/meshport_radio_test/firmware.bin out/
+          ls -lh out
+
+      - name: Upload radio test
+        uses: actions/upload-artifact@v4
+        with:
+          name: meshport-radio-test
+          path: out/*
+          if-no-files-found: error

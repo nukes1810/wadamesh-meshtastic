@@ -1,0 +1,43 @@
+name: Build T-Deck firmware
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache PlatformIO
+        uses: actions/cache@v4
+        with:
+          path: ~/.platformio
+          key: pio-tdeck-${{ hashFiles('platformio.ini') }}
+
+      - name: Install PlatformIO
+        run: pip install "platformio>=6.1.15"
+
+      - name: Build LilyGo T-Deck (touch)
+        run: pio run -e LilyGo_TDeck_companion_radio_touch
+
+      - name: Collect firmware
+        run: |
+          mkdir -p out
+          cp .pio/build/LilyGo_TDeck_companion_radio_touch/*.bin out/ 2>/dev/null || true
+          ls -lh out
+
+      - name: Upload firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: wadamesh-tdeck-firmware
+          path: out/*
+          if-no-files-found: error

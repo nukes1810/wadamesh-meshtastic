@@ -20,8 +20,8 @@ bool MeshtasticRadio::begin(const RadioSettings &s)
     if (st != RADIOLIB_ERR_NONE) {
         return false;
     }
-    // Meshtastic frames carry no RadioLib CRC wrapper beyond the LoRa payload CRC.
-    radio_.setCRC(true);
+    // T-Deck wiring (Meshtastic variants/esp32s3/t-deck): DIO2 drives the RF switch.
+    radio_.setDio2AsRfSwitch(true);
     radio_.setDio1Action(onDio1);
     return startReceive();
 }

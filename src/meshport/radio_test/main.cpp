@@ -55,6 +55,12 @@ void setup()
     Serial.println("meshport radio test");
     Serial.println("ANTENNA MUST BE ATTACHED");
 
+    // T-Deck peripheral power (LoRa radio, display). Must be HIGH before the radio responds.
+    // Same pin as Wadamesh TDeckBoard.cpp (PIN_PERF_POWERON=10).
+    pinMode(10, OUTPUT);
+    digitalWrite(10, HIGH);
+    delay(200);
+
     uint64_t mac = ESP.getEfuseMac();
     myNode = static_cast<uint32_t>(mac ^ (mac >> 32));
 

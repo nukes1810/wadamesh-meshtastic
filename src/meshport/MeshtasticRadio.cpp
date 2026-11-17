@@ -21,8 +21,12 @@ bool MeshtasticRadio::begin(const RadioSettings &s)
     if (st != RADIOLIB_ERR_NONE) {
         return false;
     }
-    // T-Deck wiring (Meshtastic variants/esp32s3/t-deck): DIO2 drives the RF switch.
-    radio_.setDio2AsRfSwitch(true);
+    // Match the Wadamesh T-Deck radio, which transmits on this board
+    // (variants/lilygo_tdeck/platformio.ini in MeshCore): no DIO2 RF switch,
+    // 140 mA current limit, boosted RX gain.
+    radio_.setCurrentLimit(140);
+    radio_.setDio2AsRfSwitch(false);
+    radio_.setRxBoostedGainMode(true);
     radio_.setDio1Action(onDio1);
     return startReceive();
 }

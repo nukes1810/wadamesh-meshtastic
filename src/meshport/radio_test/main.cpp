@@ -1,3 +1,4 @@
+#ifdef MESHPORT_RADIO_TEST
 // Device radio test for the Meshtastic LoRa path on the T-Deck (SX1262).
 // Build and upload:  pio run -e meshport_radio_test -t upload
 // Monitor:           pio device monitor -e meshport_radio_test
@@ -12,13 +13,13 @@
 #include <SPI.h>
 #include <RadioLib.h>
 
-#include "../../src/meshport/MeshtasticWire.cpp"
-#include "../../src/meshport/MeshtasticCrypto.cpp"
-#include "../../src/meshport/MeshtasticCryptoBackend_mbedtls.cpp"
-#include "../../src/meshport/MeshtasticProto.cpp"
-#include "../../src/meshport/MeshtasticFrame.cpp"
-#include "../../src/meshport/MeshtasticChannelPlan.cpp"
-#include "../../src/meshport/MeshtasticRadio.cpp"
+#include "../MeshtasticWire.cpp"
+#include "../MeshtasticCrypto.cpp"
+#include "../MeshtasticCryptoBackend_mbedtls.cpp"
+#include "../MeshtasticProto.cpp"
+#include "../MeshtasticFrame.cpp"
+#include "../MeshtasticChannelPlan.cpp"
+#include "../MeshtasticRadio.cpp"
 
 using namespace meshport;
 
@@ -139,3 +140,5 @@ void loop()
                       (unsigned long)h.id, rssi, snr, (unsigned long)d.portnum, text.c_str());
     }
 }
+
+#endif // MESHPORT_RADIO_TEST

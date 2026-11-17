@@ -112,7 +112,7 @@ static void sendPing()
     if (driver->send(frame)) {
         Serial.printf("tx #%lu (%u bytes)\n", (unsigned long)packetCounter, (unsigned)frame.size());
     } else {
-        Serial.println("tx failed");
+        Serial.printf("tx failed, RadioLib code %d\n", (int)driver->lastTxError());
     }
 }
 

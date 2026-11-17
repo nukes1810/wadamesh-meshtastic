@@ -34,6 +34,7 @@ bool MeshtasticRadio::send(const std::vector<uint8_t> &frame)
     }
     radio_.clearDio1Action();
     int16_t st = radio_.transmit(frame.data(), frame.size());
+    lastTxError_ = st;
     radio_.setDio1Action(onDio1);
     if (st != RADIOLIB_ERR_NONE) {
         return false;

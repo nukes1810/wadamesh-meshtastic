@@ -32,6 +32,9 @@ public:
     // Configure the chip. Returns false if RadioLib reports an error.
     bool begin(const RadioSettings &s);
 
+    // RadioLib error code from the last begin() call (RADIOLIB_ERR_NONE on success).
+    int16_t lastBeginError() const { return lastBeginError_; }
+
     // Blocking transmit of one frame (header + encrypted payload). Returns false on error.
     bool send(const std::vector<uint8_t> &frame);
 
@@ -43,6 +46,7 @@ public:
 
 private:
     SX1262 &radio_;
+    int16_t lastBeginError_ = RADIOLIB_ERR_NONE;
     static void onDio1();
     static volatile bool rxFlag_;
 };

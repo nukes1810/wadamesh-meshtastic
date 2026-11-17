@@ -78,7 +78,7 @@ void setup()
     s.useLdo = false;
 
     if (!driver->begin(s)) {
-        Serial.println("radio begin FAILED");
+        Serial.printf("radio begin FAILED, RadioLib code %d\n", (int)driver->lastBeginError());
         while (true) {
             delay(1000);
         }

@@ -17,6 +17,7 @@ bool MeshtasticRadio::begin(const RadioSettings &s)
 {
     int16_t st = radio_.begin(s.freqMHz, s.bwKHz, s.sf, s.cr, s.syncWord, s.powerDbm, s.preambleLen,
                               s.tcxoVoltage, s.useLdo);
+    lastBeginError_ = st;
     if (st != RADIOLIB_ERR_NONE) {
         return false;
     }
